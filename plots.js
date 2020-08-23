@@ -31,10 +31,8 @@ function buildMetadata(sample) {
     });
   });
 }
-
 //Create a bar chart of the top ten bacterial species in a volunteer’s navel
 //Select only the most populous species
-
 function buildBarChart(sample) {
   d3.json("samples.json").then((data) => {
     console.log(data);
@@ -62,7 +60,7 @@ function buildBarChart(sample) {
         name: "Top 10 OTU",
         type: "bar",
         orientation: "h",
-        marker: { color: "rgb(77, 78, 218)" },
+        marker: { color: "rgb(76, 168, 100)" },
       },
     ];
 
@@ -70,7 +68,6 @@ function buildBarChart(sample) {
     Plotly.newPlot("bar", bar_trace);
   });
 }
-
 //Create a bubble chart to visualize the relative frequency of all the bacterial species found in a volunteer’s navel
 function buildBubbleChart(sample) {
   d3.json("samples.json").then((data) => {
@@ -97,7 +94,7 @@ function buildBubbleChart(sample) {
         y: sample_values,
         text: otu_labels,
         mode: "markers",
-        marker: { color: otu_ids, size: sample_values, colorscale: "Rainbow" },
+        marker: { color: otu_ids, size: sample_values, colorscale: "Greens" },
       },
     ];
 
@@ -110,126 +107,42 @@ function buildBubbleChart(sample) {
   });
 }
 
-//Adapt the gauge chart to show washing frequency
-function buildGaugeChart(wfreq) {
+function buildGaugeChart(Sample) {
   d3.json("samples.json").then((data) => {
-    //var metadata = data.metadata;
-    //var resultArray = metadata.filter((sampleObj) => sampleObj.id == sample);
-    //var result = resultArray[0];
-    //console.log(result);
-    var washFreq = wfreq / 9;
-    //use trigonometry to calculate meter point
-    var level = washFreq * 180;
-    var degrees = 180 - level,
-      radius = 0.5;
-    var radians = (degrees * Math.PI) / 180;
-    var x = radius * Math.cos(radians);
-    var y = radius * Math.sin(radians);
-    // Path: may have to change to create a better triangle
-    var mainPath = "M -.0 -0.05 L .0 0.05 L ",
-      pathX = String(x),
-      space = " ",
-      pathY = String(y),
-      pathEnd = " Z";
-    var path = mainPath.concat(pathX, space, pathY, pathEnd);
-    var data = [
+    var samples = data.metadata;
+    var resultArray = samples.filter((sampleObj) => sampleObj.id == Sample);
+    var result = resultArray[0];
+
+    var gauge_chart = [
       {
-        type: "scatter",
-        x: [0],
-        y: [0],
-        marker: { size: 12, color: "850000" },
-        showlegend: false,
-        name: "Freq",
-        text: level,
-        hoverinfo: "text+name",
-      },
-      {
-        values: [
-          50 / 9,
-          50 / 9,
-          50 / 9,
-          50 / 9,
-          50 / 9,
-          50 / 9,
-          50 / 9,
-          50 / 9,
-          50 / 9,
-          50,
-        ],
-        rotation: 90,
-        text: [
-          "8-9",
-          "7-8",
-          "6-7",
-          "5-6",
-          "4-5",
-          "3-4",
-          "2-3",
-          "1-2",
-          "0-1",
-          "",
-        ],
-        textinfo: "text",
-        textposition: "inside",
-        marker: {
-          colors: [
-            "rgb(250, 0, 0)",
-            "rgb(250, 129, 8)",
-            "rgb(250, 234, 10)",
-            "rgb(15, 224, 0)",
-            "rgb(0, 238, 255)",
-            "rgb(0, 0, 255)",
-            "rgb(123, 8, 255)",
-            "rgb(191, 15, 255)",
-            "rgb(255, 15, 255)",
-            "rgba(255, 255, 255, 0)",
+        domain: { x: [0, 1], y: [0, 1] },
+        value: result.wfreq,
+        title: "Belly Button Washing Scrubs per Week",
+        type: "indicator",
+        mode: "gauge+number",
+        gauge: {
+          bar: { color: "white" },
+          axis: { range: [null, 9] },
+          steps: [
+            { range: [0, 1], color: "rgb(249, 253, 248)" },
+            { range: [1, 2], color: "rgb(217, 240, 212)" },
+            { range: [2, 3], color: "rgb(195, 231, 191)" },
+            { range: [3, 4], color: "rgb(143, 208, 141))" },
+            { range: [4, 5], color: "rgb(115, 189, 136)" },
+            { range: [5, 6], color: "rgb(78, 154, 108)" },
+            { range: [6, 7], color: "rgb(77, 134, 100)" },
+            { range: [7, 8], color: "rgb(77, 124, 96)" },
+            { range: [8, 9], color: "rgb(24, 58, 22)" },
           ],
         },
-        labels: [
-          "8-9",
-          "7-8",
-          "6-7",
-          "5-6",
-          "4-5",
-          "3-4",
-          "2-3",
-          "1-2",
-          "0-1",
-          "",
-        ],
-        hoverinfo: "label",
-        hole: 0.5,
-        type: "pie",
-        showlegend: false,
       },
     ];
     var layout = {
-      shapes: [
-        {
-          type: "path",
-          path: path,
-          fillcolor: "850000",
-          line: {
-            color: "850000",
-          },
-        },
-      ],
-      title: "<b>Belly Button Washing Frequency</b> <br> Scrubs per Week",
-      height: 500,
       width: 500,
-      xaxis: {
-        zeroline: false,
-        showticklabels: false,
-        showgrid: false,
-        range: [-1, 1],
-      },
-      yaxis: {
-        zeroline: false,
-        showticklabels: false,
-        showgrid: false,
-        range: [-1, 1],
-      },
+      height: 450,
+      margin: { t: 0, b: 0 },
     };
-    Plotly.newPlot("gauge", data, layout);
+
+    Plotly.newPlot("gauge", gauge_chart, layout);
   });
 }
