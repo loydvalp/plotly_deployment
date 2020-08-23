@@ -65,8 +65,8 @@ function buildBarChart(sample) {
     ];
 
     var bubble_layout = {
-      paper_bgcolor: "rgb(119, 133, 127);",
-      plot_bgcolor: "rgb(119, 133, 127);",
+      paper_bgcolor: "rgb(137, 151, 145);",
+      plot_bgcolor: "rgb(137, 151, 145);",
     };
     // format plot area
     Plotly.newPlot("bar", bar_trace, bubble_layout);
@@ -106,8 +106,8 @@ function buildBubbleChart(sample) {
     var bubble_layout = {
       title: "OTU ID",
       showlegend: false,
-      paper_bgcolor: "rgb(119, 133, 127);",
-      plot_bgcolor: "rgb(119, 133, 127);",
+      paper_bgcolor: "rgb(137, 151, 145);",
+      plot_bgcolor: "rgb(137, 151, 145);",
     };
     Plotly.newPlot("bubble", bubble_trace, bubble_layout);
   });
@@ -147,8 +147,8 @@ function buildGaugeChart(Sample) {
       width: 500,
       height: 450,
       margin: { t: 0, b: 0 },
-      paper_bgcolor: "rgb(119, 133, 127);",
-      plot_bgcolor: "rgb(119, 133, 127);",
+      paper_bgcolor: "rgb(137, 151, 145);",
+      plot_bgcolor: "rgb(137, 151, 145);",
     };
     // format plot area
     Plotly.newPlot("gauge", gauge_chart, layout);
