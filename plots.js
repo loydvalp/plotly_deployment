@@ -64,8 +64,12 @@ function buildBarChart(sample) {
       },
     ];
 
+    var bubble_layout = {
+      paper_bgcolor: "rgb(119, 133, 127);",
+      plot_bgcolor: "rgb(119, 133, 127);",
+    };
     // format plot area
-    Plotly.newPlot("bar", bar_trace);
+    Plotly.newPlot("bar", bar_trace, bubble_layout);
   });
 }
 //Create a bubble chart to visualize the relative frequency of all the bacterial species found in a volunteer’s navel
@@ -102,6 +106,8 @@ function buildBubbleChart(sample) {
     var bubble_layout = {
       title: "OTU ID",
       showlegend: false,
+      paper_bgcolor: "rgb(119, 133, 127);",
+      plot_bgcolor: "rgb(119, 133, 127);",
     };
     Plotly.newPlot("bubble", bubble_trace, bubble_layout);
   });
@@ -127,7 +133,7 @@ function buildGaugeChart(Sample) {
             { range: [0, 1], color: "rgb(249, 253, 248)" },
             { range: [1, 2], color: "rgb(217, 240, 212)" },
             { range: [2, 3], color: "rgb(195, 231, 191)" },
-            { range: [3, 4], color: "rgb(143, 208, 141))" },
+            { range: [3, 4], color: "rgb(143, 208, 141)" },
             { range: [4, 5], color: "rgb(115, 189, 136)" },
             { range: [5, 6], color: "rgb(78, 154, 108)" },
             { range: [6, 7], color: "rgb(77, 134, 100)" },
@@ -141,8 +147,10 @@ function buildGaugeChart(Sample) {
       width: 500,
       height: 450,
       margin: { t: 0, b: 0 },
+      paper_bgcolor: "rgb(119, 133, 127);",
+      plot_bgcolor: "rgb(119, 133, 127);",
     };
-
+    // format plot area
     Plotly.newPlot("gauge", gauge_chart, layout);
   });
 }
