@@ -19,6 +19,9 @@ The goals of this challenge:
 
 
 ## Click Link below to deploy page
+
+Participants can visit the website, select their ID number from a self-populating dropdown menu, and view key statistics of their results.
+
 https://loydvalp.github.io/plotly_deployment/
 
 ![](image/screencapture.png)
