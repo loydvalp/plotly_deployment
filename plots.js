@@ -59,15 +59,15 @@ function buildBarChart(sample) {
         x: top_ten_sample,
         y: top_ten_OTU,
         text: top_ten_labels,
-        name: "Top 10",
+        name: "Top 10 OTU",
         type: "bar",
         orientation: "h",
+        marker: { color: "rgb(77, 78, 218)" },
       },
     ];
 
     // format plot area
-    var bar_layout = { title: "Top 10 OTUs" };
-    Plotly.newPlot("bar", bar_trace, bar_layout);
+    Plotly.newPlot("bar", bar_trace);
   });
 }
 
@@ -97,7 +97,7 @@ function buildBubbleChart(sample) {
         y: sample_values,
         text: otu_labels,
         mode: "markers",
-        marker: { color: otu_ids, size: sample_values },
+        marker: { color: otu_ids, size: sample_values, colorscale: "Rainbow" },
       },
     ];
 
@@ -111,65 +111,125 @@ function buildBubbleChart(sample) {
 }
 
 //Adapt the gauge chart to show washing frequency
-function buildGaugeChart(sample) {
+function buildGaugeChart(wfreq) {
   d3.json("samples.json").then((data) => {
-    var metadata = data.metadata;
-    var resultArray = metadata.filter((sampleObj) => sampleObj.id == sample);
-    var result = resultArray[0];
-    console.log(result);
-    var washFreq = result.wfreq;
-    console.log(washFreq);
-
-    // load data for plotting
-    var gauge_trace = [
+    //var metadata = data.metadata;
+    //var resultArray = metadata.filter((sampleObj) => sampleObj.id == sample);
+    //var result = resultArray[0];
+    //console.log(result);
+    var washFreq = wfreq / 9;
+    //use trigonometry to calculate meter point
+    var level = washFreq * 180;
+    var degrees = 180 - level,
+      radius = 0.5;
+    var radians = (degrees * Math.PI) / 180;
+    var x = radius * Math.cos(radians);
+    var y = radius * Math.sin(radians);
+    // Path: may have to change to create a better triangle
+    var mainPath = "M -.0 -0.05 L .0 0.05 L ",
+      pathX = String(x),
+      space = " ",
+      pathY = String(y),
+      pathEnd = " Z";
+    var path = mainPath.concat(pathX, space, pathY, pathEnd);
+    var data = [
       {
-        //domain: { x: [0, 1], y: [0, 1] },
-        value: washFreq,
+        type: "scatter",
+        x: [0],
+        y: [0],
+        marker: { size: 12, color: "850000" },
         showlegend: false,
-        hole: 0.4,
+        name: "Freq",
+        text: level,
+        hoverinfo: "text+name",
+      },
+      {
+        values: [
+          50 / 9,
+          50 / 9,
+          50 / 9,
+          50 / 9,
+          50 / 9,
+          50 / 9,
+          50 / 9,
+          50 / 9,
+          50 / 9,
+          50,
+        ],
         rotation: 90,
-        title: { text: "Belly Button Washing Frequency" },
-        type: "pie",
-        //mode: "gauge+number",
-        direction: "clockwise",
+        text: [
+          "8-9",
+          "7-8",
+          "6-7",
+          "5-6",
+          "4-5",
+          "3-4",
+          "2-3",
+          "1-2",
+          "0-1",
+          "",
+        ],
         textinfo: "text",
         textposition: "inside",
         marker: {
-          labels: [
-            "0-1",
-            "1-2",
-            "2-3",
-            "3-4",
-            "4-5",
-            "5-6",
-            "6-7",
-            "7-8",
-            "8-9",
+          colors: [
+            "rgb(250, 0, 0)",
+            "rgb(250, 129, 8)",
+            "rgb(250, 234, 10)",
+            "rgb(15, 224, 0)",
+            "rgb(0, 238, 255)",
+            "rgb(0, 0, 255)",
+            "rgb(123, 8, 255)",
+            "rgb(191, 15, 255)",
+            "rgb(255, 15, 255)",
+            "rgba(255, 255, 255, 0)",
           ],
         },
-        /*gauge: {
-          axis: { range: [null, 10] },
-          bar: { color: "green" },
-        },*/
+        labels: [
+          "8-9",
+          "7-8",
+          "6-7",
+          "5-6",
+          "4-5",
+          "3-4",
+          "2-3",
+          "1-2",
+          "0-1",
+          "",
+        ],
+        hoverinfo: "label",
+        hole: 0.5,
+        type: "pie",
+        showlegend: false,
       },
     ];
-
-    // format plot area
-    var gauge_layout = {
+    var layout = {
       shapes: [
         {
-          type: "line",
-          x0: 0.5,
-          y0: 0.5,
-          x1: 0.6,
-          y1: 0.6,
+          type: "path",
+          path: path,
+          fillcolor: "850000",
           line: {
-            color: "black",
-            width: 3,
+            color: "850000",
           },
         },
       ],
+      title: "<b>Belly Button Washing Frequency</b> <br> Scrubs per Week",
+      height: 500,
+      width: 500,
+      xaxis: {
+        zeroline: false,
+        showticklabels: false,
+        showgrid: false,
+        range: [-1, 1],
+      },
+      yaxis: {
+        zeroline: false,
+        showticklabels: false,
+        showgrid: false,
+        range: [-1, 1],
+      },
     };
-    Plotly.newPlot("gauge", gauge_trace, gauge_layout);
+    Plotly.newPlot("gauge", data, layout);
   });
 }
